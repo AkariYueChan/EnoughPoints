@@ -1,8 +1,9 @@
 EnoughPoints 用AI做的 单个HTML网页 选课课表生成器
 Only For 广州职业技术大学2026级物联网应用技术（中外合办）专业
 
-EnoughPoints -Vibecoding Project Made by Akari_Zeng
-Schedule For "GPU University" [GZPYP] Year2026 IOT(Chinese-Foreign-COOP) Class
+EnoughPoints -A single-page HTML schedule generator
+-This is a vibecoding project Made by Akari_Zeng
+Schedule only For "GPU University" [GZPYP] Year2026 IOT(Chinese-Foreign-COOP) Class
 
 Huge THANKS : Workbuddy&DeepSeek-V4.1-Flash
 鸣谢：Workbuddy国内版、Deepseek-V4.1-Flash
