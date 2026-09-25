@@ -4,6 +4,8 @@
 
 **适用范围：仅限广州职业技术大学 2026 级物联网应用技术（中外合办）专业。**
 
+** 游玩地址：https://akariyuechan.github.io/EnoughPoints/ **
+
 ## Project Overview
 
 EnoughPoints is a single-page HTML schedule generator.
