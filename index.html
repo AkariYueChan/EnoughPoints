@@ -49,13 +49,25 @@
   .detail-btn{
     flex:0 0 auto;
     border:1px solid var(--line);background:#fff;color:var(--text);
-    font-family:inherit;font-size:13.5px;font-weight:500;
+    font-family:inherit;font-size:13.5px;font-weight:500;line-height:1.45;
     padding:10px 18px;border-radius:10px;cursor:pointer;transition:.16s;
     display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
     -webkit-tap-highlight-color:transparent;
   }
   .detail-btn:hover{background:#f8fafc;border-color:#cbd5e1;}
   .detail-btn:active{transform:scale(.97);}
+  /* GitHub 按钮：以 GitHub logo 为主视觉，深色实心（GitHub 官方色 #24292f） */
+  .gh-btn{
+    flex:0 0 auto;text-decoration:none;
+    display:inline-flex;align-items:center;gap:7px;
+    background:#24292f;border:1px solid #24292f;color:#fff;
+    font-size:13.5px;font-weight:500;line-height:1.45;     /* 与「了解详情」统一行高，保证两按钮等高 */
+    padding:10px 16px;border-radius:10px;cursor:pointer;transition:.16s;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .gh-btn:hover{background:#3a424b;border-color:#3a424b;}
+  .gh-btn:active{transform:scale(.97);}
+  .gh-btn .gh-logo{display:block;flex:0 0 auto;}
 
   /* ---------- 顶部 ---------- */
   .topbar{
@@ -417,6 +429,8 @@
     .page-title{font-size:19px;}
     .page-sub{font-size:14px;}
     .detail-btn{width:100%;justify-content:center;padding:12px 16px;font-size:14px;}
+    /* GitHub 按钮跟在「了解详情」下面，同样整行通栏 */
+    .gh-btn{width:100%;justify-content:center;padding:12px 16px;font-size:14px;}
     .topbar{padding:14px;gap:12px;border-radius:14px;}
     .progress-area{min-width:100%;}
     .topbar .reset{width:100%;padding:12px;font-size:14px;border-radius:11px;}
@@ -489,6 +503,14 @@
     </div>
     <button class="detail-btn" id="btn-detail" type="button"
             title="将在新标签页打开中外合作办学监管平台与学校专业介绍两个页面">了解详情 <span aria-hidden="true">↗</span></button>
+    <a class="gh-btn" id="btn-github" href="https://github.com/AkariYueChan/EnoughPoints"
+       target="_blank" rel="noopener noreferrer"
+       title="在 GitHub 上查看这个项目（新标签页打开）">
+      <svg class="gh-logo" viewBox="0 0 16 16" width="17" height="17" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      <span>GitHub</span>
+    </a>
   </header>
 
   <div class="rules">
