@@ -316,7 +316,7 @@ EnoughPoints 是一个 **Vibe-Coding 开源项目**。
 
 ```text
 DeepSeek V4.1-Flash / V4.0-Pro
-ChatGPT-6 Astra / GPT-5.5 Luna
+ChatGPT-6 Astra / GPT-5.6 Luna
 Kimi K3
 ```
 
