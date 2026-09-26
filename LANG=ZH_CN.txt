@@ -1,1 +1,0 @@
-LANG=ZH_CN
