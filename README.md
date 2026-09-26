@@ -4,7 +4,9 @@
 > A course planning tool for calculating credits and generating semester schedules.
 
 **EnoughPoints 是一个 Vibe-Coding 项目。** made by **Akari悦酱**
+
 **仅供个人娱乐，请勿用于商业用途！！开源遵循MIT License**
+
 **本项目只使用广州职业技术大学（GPU大学）的课表测试过，其他学校的理论上能通用，只要是excel表格，有对应的信息就行**
 
 本项目的代码均由 AI 编写、修改与协助维护。  
