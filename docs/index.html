@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>物联网应用技术（中外合办）· 选课学分规划</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --panel:#ffffff;
+    --line:#e3e8f2;
+    --text:#0f172a;
+    --muted:#64748b;
+    --faint:#94a3b8;
+    --bad:#dc2626;
+    --bad-soft:#fef2f2;
+    --bad-line:#fecaca;
+    --ok:#16a34a;
+    --ok-soft:#f0fdf4;
+    --ok-line:#bbf7d0;
+    --public:#2563eb;
+    --public-soft:#eff6ff;
+    --pub-elec:#0d9488;
+    --pub-elec-soft:#f0fdfa;
+    --req:#d97706;
+    --req-soft:#fffbeb;
+    --elec:#7c3aed;
+    --elec-soft:#f5f3ff;
+    --shadow:0 1px 2px rgba(15,23,42,.05), 0 8px 24px -12px rgba(15,23,42,.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+    font-size:14px;
+    line-height:1.5;
+    padding:22px 24px 40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1400px;margin:0 auto;}
+
+  /* ---------- 顶部专业标题 ---------- */
+  .page-head{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;
+  }
+  .page-head-text{flex:1 1 320px;min-width:0;}
+  .page-title{margin:0;font-size:22px;font-weight:700;letter-spacing:.3px;line-height:1.3;}
+  .page-sub{margin:7px 0 0;font-size:15px;font-weight:700;color:var(--text);letter-spacing:.5px;}
+  .detail-btn{
+    flex:0 0 auto;
+    border:1px solid var(--line);background:#fff;color:var(--text);
+    font-family:inherit;font-size:13.5px;font-weight:500;line-height:1.45;
+    padding:10px 18px;border-radius:10px;cursor:pointer;transition:.16s;
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .detail-btn:hover{background:#f8fafc;border-color:#cbd5e1;}
+  .detail-btn:active{transform:scale(.97);}
+  /* GitHub 按钮：以 GitHub logo 为主视觉，深色实心（GitHub 官方色 #24292f） */
+  .gh-btn{
+    flex:0 0 auto;text-decoration:none;
+    display:inline-flex;align-items:center;gap:7px;
+    background:#24292f;border:1px solid #24292f;color:#fff;
+    font-size:13.5px;font-weight:500;line-height:1.45;     /* 与「重新导入」按钮统一行高，保证两按钮等高 */
+    padding:10px 16px;border-radius:10px;cursor:pointer;transition:.16s;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .gh-btn:hover{background:#3a424b;border-color:#3a424b;}
+  .gh-btn:active{transform:scale(.97);}
+  .gh-btn .gh-logo{display:block;flex:0 0 auto;}
+
+  /* ---------- 顶部 ---------- */
+  .topbar{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:16px 20px;box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  .progress-area{flex:1;min-width:280px;}
+  .progress-head{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);margin-bottom:6px;}
+  .progress-head b{font-size:14px;color:var(--text);}
+  .bar{height:9px;border-radius:99px;background:#eef2f9;overflow:hidden;}
+  /* 总进度条：学分不够 = 红，学分够了 = 绿 */
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#f87171,#dc2626);transition:width .35s ease, background .3s;}
+  .bar.allok > i{background:linear-gradient(90deg,#4ade80,#16a34a);}
+  .reset{
+    border:1px solid var(--line);background:#fff;color:var(--text);
+    padding:9px 16px;border-radius:10px;font-size:13px;cursor:pointer;font-family:inherit;
+    transition:.18s;white-space:nowrap;
+  }
+  .reset:hover{background:#f8fafc;border-color:#cbd5e1;}
+  .reset:active{transform:scale(.97);}
+
+  .rules{
+    margin:0 0 14px;color:var(--muted);font-size:12.5px;line-height:1.75;
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+    padding:11px 14px;background:#fff;border:1px solid var(--line);border-radius:12px;
+  }
+  .rules > span:first-child{color:var(--text);font-weight:600;}
+  .rules b{color:var(--text);}
+  .rules .dot{width:5px;height:5px;border-radius:99px;background:#cbd5e1;}
+
+  /* ---------- 类别框 ---------- */
+  .zones{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;}
+  @media (max-width:980px){.zones{grid-template-columns:1fr;}}
+
+  .zone{
+    background:var(--panel);border:2px solid var(--bad-line);border-radius:16px;
+    display:flex;flex-direction:column;overflow:hidden;
+    transition:border-color .25s, box-shadow .25s;
+    box-shadow:var(--shadow);
+  }
+  .zone.ok{border-color:var(--ok-line);}
+  .zone.over{border-color:#93c5fd;box-shadow:0 0 0 4px #dbeafe;}
+  .zone.deny{animation:shake .38s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-6px);}
+    45%{transform:translateX(5px);}
+    70%{transform:translateX(-3px);}
+  }
+  .zone-head{padding:14px 16px;background:var(--bad-soft);border-bottom:1px solid var(--bad-line);transition:.25s;}
+  .zone.ok .zone-head{background:var(--ok-soft);border-bottom-color:var(--ok-line);}
+  .zh-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .zh-title{font-size:15.5px;font-weight:600;display:flex;align-items:baseline;gap:6px;}
+  .zh-title small{font-weight:400;color:var(--muted);font-size:12.5px;}
+  .badge{
+    font-size:11.5px;padding:3px 9px;border-radius:99px;font-weight:600;
+    background:var(--bad);color:#fff;white-space:nowrap;
+  }
+  .zone.ok .badge{background:var(--ok);}
+  .zh-msg{margin-left:auto;font-size:12.5px;color:var(--bad);font-weight:500;text-align:right;}
+  .zone.ok .zh-msg{color:var(--ok);}
+  .zh-stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:9px;font-size:12.5px;color:var(--muted);}
+  .zh-stats b{color:var(--text);font-size:14px;}
+  .mini{display:flex;align-items:center;gap:8px;padding:2px 8px;border-radius:99px;background:#fff;border:1px solid var(--line);}
+  .mini .bar{width:76px;height:7px;background:#e6ebf3;}
+  /* 小进度条跟总进度条用同一套语言：没达标＝红，达标＝绿 */
+  .mini .bar > i{background:linear-gradient(90deg,#f87171,#dc2626);}
+  .mini.done{border-color:var(--ok-line);background:var(--ok-soft);}
+  .mini.done .bar > i{background:linear-gradient(90deg,#4ade80,#16a34a);}
+  /* 选修进度条后面的「重置」按钮（清空已选选修课） */
+  .mini-btn{
+    display:inline-flex;align-items:center;gap:4px;
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    font-family:inherit;font-size:12px;line-height:1;
+    padding:0 11px;height:26px;border-radius:99px;white-space:nowrap;
+    cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;
+  }
+  .mini-btn:hover{border-color:#cbd5e1;color:var(--text);background:#f8fafc;}
+  .mini-btn:active{transform:scale(.95);}
+  .mini-btn.empty{opacity:.5;}
+
+  .zone-body{
+    padding:12px;min-height:190px;max-height:46vh;overflow-y:auto;
+    background:
+      repeating-linear-gradient(45deg,#fafbfe 0 10px,#f6f8fc 10px 20px);
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    /* 关键：显式声明行为 max-content。否则本容器是"有确定高度的滚动容器"时，
+       Blink 会按 min-content 算行高（=卡片 min-height 96px），
+       内容更高的卡片就会把底部学分挤出卡片外。 */
+    grid-auto-rows:max-content;
+    gap:10px;align-content:start;flex:1;
+  }
+  .zone-body::-webkit-scrollbar{width:8px;}
+  .zone-body::-webkit-scrollbar-thumb{background:#d8dfec;border-radius:99px;}
+  .zone-body.empty{display:flex;align-items:center;justify-content:center;}
+  .zone-body.empty::after{
+    content:attr(data-ph);color:var(--faint);font-size:13px;
+    border:1.5px dashed #cbd5e1;border-radius:12px;padding:26px 34px;text-align:center;
+  }
+  .zone-foot{padding:9px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);background:#fff;}
+
+  /* ---------- 卡片 ---------- */
+  /* 关键：卡片内所有文本一律单行截断，卡片高度因此完全确定，不会出现"内容把学分挤出卡片" */
+  .card{
+    background:#fff;border:1px solid var(--line);border-left:3px solid var(--public);
+    border-radius:11px;padding:9px 10px;cursor:grab;user-select:none;
+    box-shadow:0 1px 2px rgba(15,23,42,.05);
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+    display:flex;flex-direction:column;gap:6px;min-height:96px;min-width:0;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 16px -8px rgba(15,23,42,.35);}
+  .card:active{cursor:grabbing;}
+  .card.dragging{opacity:.4;transform:scale(.96);}
+  .card.c-major-req{border-left-color:var(--req);}
+  .card.c-major-elec{border-left-color:var(--elec);}
+  /* 公共基础课选修：和公共必修（蓝）区分开的青绿色 */
+  .card.c-public-elec{border-left-color:var(--pub-elec);}
+  /* 必修课：开局已自动排入，固定不可拖动 */
+  .card.locked{position:relative;cursor:default;background:#f8fafc;}
+  .card.locked::after{
+    content:'';position:absolute;inset:0;border-radius:9px;pointer-events:none;
+    background:repeating-linear-gradient(45deg,
+      rgba(100,116,139,.12) 0px, rgba(100,116,139,.12) 5px,
+      rgba(100,116,139,0)   5px, rgba(100,116,139,0)   12px);
+  }
+  .card.locked > *{position:relative;z-index:1;}
+  .card.locked:hover{transform:none;box-shadow:0 1px 2px rgba(15,23,42,.05);}
+  .card.locked:active{cursor:default;}
+  .card.locked .c-name{color:#475569;}
+  .card.locked .c-credit,.card.locked .c-credit b{color:#5b6b80;}
+  .c-lock{font-size:10px;color:#6f7f95;white-space:nowrap;}
+  /* 课程名：字号调小 + 固定两行高度。
+     固定高度让卡片的字高贡献确定，网格行高不会再被算小 → 学分永远不会被挤出卡片。
+     （此前用 -webkit-line-clamp 时它的内在高度贡献不可靠，是名字消失/内容溢出的根源。） */
+  .c-name{font-size:12px;font-weight:600;line-height:1.4;
+    flex:0 0 auto;min-width:0;height:2.8em;overflow:hidden;
+    word-break:break-word;overflow-wrap:anywhere;}
+  /* 标签行：永不换行，属性标签按需省略 */
+  .c-meta{display:flex;gap:5px;flex-wrap:nowrap;flex:0 0 auto;min-width:0;overflow:hidden;}
+  .tag{font-size:10.5px;padding:2px 6px;border-radius:5px;white-space:nowrap;line-height:1.5;}
+  .t-type{background:#f1f5f9;color:#475569;font-weight:600;flex:0 0 auto;}
+  .t-attr{background:#f8fafc;color:var(--muted);border:1px solid #eef2f7;
+    flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+  .c-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+    gap:5px;flex:0 0 auto;min-width:0;}
+  .c-credit{font-size:11px;color:var(--muted);flex:0 0 auto;white-space:nowrap;}
+  .c-credit b{font-size:15px;color:var(--text);margin-right:2px;}
+  /* 学期标签形如「大三上 · 第 5 学期」，字数固定，字号略小以留出安全余量（跨平台字体差异也不会断尾） */
+  .c-term,.c-lock{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
+  .c-term{font-size:10px;color:var(--faint);}
+  .c-cat{font-size:10px;color:#cbd5e1;}
+
+  /* ---------- 课程池 ---------- */
+  .pool{
+    margin-top:18px;background:var(--panel);border:1px solid var(--line);
+    border-radius:16px;padding:14px 16px 18px;box-shadow:var(--shadow);
+  }
+  .pool-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+  .pool-head h2{font-size:14.5px;margin:0;font-weight:600;}
+  .pool-head .count{font-size:12px;color:var(--muted);}
+  .pool-desc{margin:0 0 12px;font-size:12.5px;color:var(--muted);line-height:1.7;}
+  .pool-desc b{color:var(--text);}
+  .pool-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  /* 筛选器开关（去掉斜杠式开关，用圆点 + aria-pressed 表示状态） */
+  .opt-chip{
+    display:inline-flex;align-items:center;gap:7px;
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    font-family:inherit;font-size:12.5px;padding:7px 14px;border-radius:99px;
+    cursor:pointer;transition:.16s;-webkit-tap-highlight-color:transparent;
+  }
+  .opt-chip::before{
+    content:'';width:14px;height:14px;border-radius:50%;
+    border:1.5px solid #cbd5e1;flex:0 0 auto;transition:.16s;
+  }
+  .opt-chip:hover{border-color:#cbd5e1;color:var(--text);}
+  .opt-chip:active{transform:scale(.97);}
+  .opt-chip[aria-pressed="true"]{background:#0f172a;border-color:#0f172a;color:#fff;}
+  .opt-chip[aria-pressed="true"]::before{
+    border-color:#fff;background:#fff;box-shadow:inset 0 0 0 3px #0f172a;
+  }
+  /* 「重置筛选」：动作按钮而非开关，无圆点，样式更轻 */
+  .opt-chip.plain{padding-left:13px;color:#64748b;border-style:dashed;}
+  .opt-chip.plain::before{display:none;}
+  .opt-chip.plain:hover{background:#f8fafc;border-style:solid;border-color:#cbd5e1;color:var(--text);}
+  /* 没有任何筛选器开启时置灰（点了会提示无需重置） */
+  .opt-chip.plain.empty{opacity:.5;}
+  .opt-chip.plain.empty:hover{background:#fff;border-style:dashed;border-color:var(--line);color:#64748b;}
+  .pool-body{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    grid-auto-rows:max-content;   /* 同上：行高按内容算，避免卡片内容溢出卡片 */
+    gap:10px;align-content:start;min-height:120px;
+  }
+  .pool-body.over{outline:2px dashed #93c5fd;outline-offset:6px;border-radius:12px;}
+  .pool-empty{grid-column:1/-1;color:var(--faint);font-size:13px;text-align:center;padding:30px 0;}
+
+  /* ---------- 提示 ---------- */
+  #toast{
+    position:fixed;left:50%;bottom:28px;transform:translate(-50%,26px);
+    background:#0f172a;color:#fff;font-size:13px;padding:11px 20px;border-radius:11px;
+    opacity:0;pointer-events:none;transition:.28s;z-index:99;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);max-width:80vw;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0);}
+  .done-banner{
+    display:none;margin-top:14px;padding:12px 18px;border-radius:12px;
+    background:var(--ok-soft);border:1px solid var(--ok-line);color:#15803d;
+    font-size:13.5px;font-weight:600;align-items:center;gap:9px;
+  }
+  .done-banner.show{display:flex;}
+
+  /* ---------- 返回顶部（右下角，距底部 = 视口高度的 1/5） ---------- */
+  .to-top{
+    position:fixed;right:20px;z-index:120;
+    bottom:20vh;                    /* 五分之一处（旧浏览器兜底） */
+    bottom:max(24px, 20vh);         /* 视口很矮时至少留 24px，避免贴底 */
+    width:46px;height:46px;border-radius:50%;
+    border:1px solid #0f172a;background:#0f172a;color:#fff;
+    font-family:inherit;font-size:19px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 24px -8px rgba(15,23,42,.5);
+    opacity:0;visibility:hidden;pointer-events:none;transform:translateY(12px);
+    transition:opacity .22s, transform .22s, visibility 0s .22s, background .15s, border-color .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .to-top.show{
+    opacity:1;visibility:visible;pointer-events:auto;transform:none;
+    transition:opacity .22s, transform .22s, visibility 0s 0s, background .15s, border-color .15s;
+  }
+  .to-top:hover{background:#1e293b;border-color:#1e293b;}
+  .to-top:active{transform:scale(.93);}
+
+  /* ---------- 达标提示框 ---------- */
+  .modal-mask{
+    position:fixed;inset:0;z-index:200;padding:20px;
+    background:rgba(15,23,42,.42);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .22s;
+  }
+  .modal-mask[hidden]{display:none;}
+  .modal-mask.show{opacity:1;}
+  .modal{
+    width:100%;max-width:400px;background:#fff;border-radius:16px;
+    padding:24px 20px 18px;text-align:center;
+    box-shadow:0 24px 64px -20px rgba(15,23,42,.55);
+    transform:translateY(14px) scale(.97);transition:transform .22s;
+  }
+  .modal-mask.show .modal{transform:none;}
+  .modal-icon{font-size:32px;line-height:1;}
+  .modal-title{margin:12px 0 0;font-size:16.5px;font-weight:600;letter-spacing:.2px;}
+  .modal-text{margin:10px 0 0;font-size:13.5px;color:var(--muted);line-height:1.7;}
+  .modal-text b{color:var(--text);}
+  .modal-actions{display:flex;gap:10px;margin-top:20px;}
+  .modal-btn{
+    flex:1 1 0;min-width:0;padding:12px 14px;border-radius:11px;
+    border:1px solid var(--line);background:#fff;color:var(--text);
+    font-family:inherit;font-size:14px;cursor:pointer;transition:.15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .modal-btn:hover{background:#f8fafc;}
+  .modal-btn:active{transform:scale(.98);}
+  .modal-btn.primary{background:#0f172a;border-color:#0f172a;color:#fff;font-weight:500;}
+  .modal-btn.primary:hover{background:#1e293b;border-color:#1e293b;}
+
+  /* ---------- 页面最底部：生成选课表 ---------- */
+  .bottom-actions{
+    margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:9px;
+  }
+  .gen-btn{
+    font-family:inherit;font-size:15px;font-weight:600;color:#fff;
+    background:#0f172a;border:1px solid #0f172a;border-radius:12px;
+    padding:14px 42px;cursor:pointer;transition:.16s;
+    box-shadow:0 12px 26px -14px rgba(15,23,42,.75);
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .gen-btn:hover{background:#1e293b;border-color:#1e293b;}
+  .gen-btn:active{transform:scale(.98);}
+  .bottom-hint{margin:0;font-size:12.5px;color:var(--bad);text-align:center;}
+  .bottom-hint.ok{color:var(--ok);}
+
+  /* ---------- 选课表（覆盖网页的白色图层） ---------- */
+  .schedule{
+    position:fixed;inset:0;z-index:300;background:#fff;
+    display:flex;flex-direction:column;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .24s, transform .24s;
+  }
+  .schedule[hidden]{display:none;}
+  .schedule.show{opacity:1;transform:none;}
+  .schedule-head{
+    flex:0 0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:12px 18px;background:#fff;border-bottom:1px solid var(--line);
+  }
+  .back-btn{
+    border:1px solid var(--line);background:#fff;color:var(--text);
+    font-family:inherit;font-size:13.5px;padding:8px 14px;border-radius:10px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px;transition:.15s;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .back-btn:hover{background:#f8fafc;border-color:#cbd5e1;}
+  .back-btn:active{transform:scale(.97);}
+  .schedule-titles{flex:1 1 auto;min-width:0;}
+  .schedule-title{margin:0;font-size:16px;font-weight:600;}
+  .schedule-sub{margin:2px 0 0;font-size:12px;color:var(--muted);}
+  .schedule-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+  .schedule-legend .lg{display:inline-flex;align-items:center;gap:5px;}
+  .schedule-legend .lg::before{content:'';width:9px;height:9px;border-radius:3px;display:block;}
+  .lg-pub::before{background:#2563eb;}
+  .lg-pub-elec::before{background:#0d9488;}
+  .lg-req::before{background:#d97706;}
+  .lg-elec::before{background:#7c3aed;}
+
+  /* 导出 PDF（右上角，绿色） */
+  .pdf-btn{
+    border:1px solid #16a34a;background:#16a34a;color:#fff;
+    font-family:inherit;font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:10px;
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    transition:.15s;-webkit-tap-highlight-color:transparent;
+    box-shadow:0 6px 14px -8px rgba(22,163,74,.9);
+  }
+  .pdf-btn:hover{background:#15803d;border-color:#15803d;}
+  .pdf-btn:active{transform:scale(.97);}
+
+  .schedule-body{flex:1 1 auto;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:24px;}
+  .schedule-table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;}
+  .schedule-table thead th{
+    position:sticky;top:0;z-index:2;background:#f8fafc;
+    font-size:12.5px;font-weight:600;padding:10px 8px;text-align:left;
+    border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+  }
+  .schedule-table th.corner{width:58px;color:var(--muted);font-weight:500;}
+  .schedule-table th.rowhead{
+    width:58px;background:#f8fafc;font-size:13px;font-weight:600;
+    text-align:center;vertical-align:middle;padding:10px 4px;
+    border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .schedule-table td{
+    vertical-align:top;padding:0;
+    border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .cell-head{font-size:11.5px;color:var(--faint);padding:6px 9px;border-bottom:1px dashed #eef2f7;}
+  .cell-list{display:flex;flex-direction:column;gap:4px;padding:8px 9px;}
+  .s-chip{
+    font-size:12px;line-height:1.35;padding:4px 7px;border-radius:6px;
+    background:#f8fafc;color:var(--text);
+    border-left:3px solid var(--public);word-break:break-word;
+  }
+  .s-chip.s-req{border-left-color:var(--req);}
+  .s-chip.s-elec{border-left-color:var(--elec);background:#fcfaff;}
+  .s-chip.s-public-elec{border-left-color:var(--pub-elec);background:var(--pub-elec-soft);}
+  .cell-empty{font-size:12px;color:#cbd5e1;}
+
+  /* 打印 / 导出 PDF 的样式不写在这里：需要在「选课表打开时」才生效，
+     而 @page{size:landscape} 无法用选择器限定范围。改由 JS 动态注入一份
+     <style media="print">（见 SCHEDULE_PRINT_CSS / enablePrintScope），
+     这样平时直接 ⌘P 打印主页面完全不受影响。 */
+
+  /* ---------- 手机端适配 ---------- */
+  @media (max-width:640px){
+    body{padding:14px 12px 32px;}
+    /* 顶部专业标题：标题独占一行，详情按钮整行通栏便于点按 */
+    .page-head{gap:12px;margin-bottom:14px;}
+    .page-head-text{flex:1 1 100%;}
+    .page-title{font-size:19px;}
+    .page-sub{font-size:14px;}
+    .detail-btn{width:100%;justify-content:center;padding:12px 16px;font-size:14px;}
+    /* GitHub 按钮和「重新导入」都整行通栏 */
+    .gh-btn{width:100%;justify-content:center;padding:12px 16px;font-size:14px;}
+    .topbar{padding:14px;gap:12px;border-radius:14px;}
+    .progress-area{min-width:100%;}
+    .topbar .reset{width:100%;padding:12px;font-size:14px;border-radius:11px;}
+    .rules{font-size:12px;gap:6px;padding:10px 12px;margin-bottom:12px;}
+
+    .zones{gap:14px;margin-top:14px;}
+    .zone-head{padding:12px;}
+    .zh-row1{gap:8px;}
+    .zh-title{font-size:15px;}
+    .zh-msg{margin-left:0;width:100%;text-align:left;}
+    .zh-stats{gap:8px 10px;font-size:12px;}
+    .zh-stats b{font-size:13.5px;}
+    .mini{padding:3px 9px;gap:7px;}
+    .mini .bar{width:52px;}
+    /* 手机上放大点按区域，方便手指操作 */
+    .mini-btn{height:36px;padding:0 16px;font-size:13px;}
+    .zone-body{padding:10px;min-height:150px;gap:8px;
+      grid-template-columns:repeat(auto-fill,minmax(146px,1fr));}
+    .zone-foot{font-size:12px;padding:9px 12px;}
+
+    .pool{padding:12px 12px 16px;border-radius:14px;}
+    .pool-head{gap:8px;}
+    .pool-head h2{font-size:14px;}
+    .pool-desc{font-size:12px;}
+    .pool-tools{margin-bottom:12px;}
+    .opt-chip{padding:10px 16px;font-size:13px;}   /* 手机上加大点按区域 */
+    .pool-body{gap:8px;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));}
+
+    /* 底部生成按钮：手机上整行通栏，点按更方便 */
+    .bottom-actions{margin-top:16px;gap:8px;}
+    .gen-btn{width:100%;padding:15px 16px;font-size:15.5px;}
+    .bottom-hint{font-size:11.5px;line-height:1.6;}
+
+    #toast{left:12px;right:12px;bottom:82px;max-width:none;transform:translateY(26px);}
+    #toast.show{transform:translateY(0);}
+
+    /* 返回顶部：手机上加大点按面积，位置同样保持在视口高度的 1/5 处 */
+    .to-top{right:14px;bottom:20vh;bottom:max(18px, 20vh);width:50px;height:50px;font-size:21px;}
+
+    .modal-mask{padding:16px;align-items:center;}
+    .modal{padding:22px 16px 16px;border-radius:15px;}
+    .modal-title{font-size:16px;}
+    .modal-text{font-size:13px;}
+    .modal-btn{padding:13px 12px;font-size:14.5px;}
+
+    /* 选课表：手机上压缩首列与标签字号，保证两列学期仍可读 */
+    .schedule-head{padding:10px 12px;gap:8px;}
+    .back-btn{padding:10px 14px;font-size:14px;}
+    .schedule-title{font-size:15px;}
+    .schedule-sub{font-size:11.5px;}
+    .schedule-legend{width:100%;font-size:11.5px;gap:12px;}
+    /* 绿色导出按钮：手机上整行通栏，方便手指点按 */
+    .pdf-btn{width:100%;justify-content:center;padding:12px;font-size:14.5px;}
+    .schedule-table th.corner,.schedule-table th.rowhead{width:44px;font-size:12px;}
+    .schedule-table thead th{font-size:12px;padding:9px 6px;}
+    .cell-head{font-size:11px;padding:5px 6px;}
+    .cell-list{padding:6px;gap:3px;}
+    .s-chip{font-size:11.5px;padding:4px 6px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 网页顶部：专业标题 + 操作按钮 -->
+  <header class="page-head">
+    <div class="page-head-text">
+      <h1 class="page-title" id="page-title">物联网应用技术（中外合办）</h1>
+      <p class="page-sub">服务器已清除本次课程数据；刷新或离开需重新导入</p>
+    </div>
+    <a class="gh-btn" id="btn-github" href="https://github.com/AkariYueChan/EnoughPoints"
+       target="_blank" rel="noopener noreferrer"
+       title="在 GitHub 上查看这个项目（新标签页打开）">
+      <svg class="gh-logo" viewBox="0 0 16 16" width="17" height="17" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      <span>GitHub</span>
+    </a>
+    <button class="detail-btn" id="btn-delete-data" type="button">删除本次数据</button>
+    <a class="detail-btn" id="btn-reimport" href="/"
+       title="回到导入页面，重新导入一份培养方案">↺ 重新导入</a>
+  </header>
+
+  <div class="rules">
+    <span>规则：</span>
+    <span>必修课已自动排入并锁定，只有<b id="rule-pick-label">专业课选修</b>需要你自己挑</span>
+    <span class="dot"></span>
+    <span id="rule-targets"></span>
+    <span class="dot"></span>
+    <span>框内卡片按<b>学期先后</b>排列，跨学期的课程会拆成多张卡（学分只计一次）</span>
+    <span class="dot"></span>
+    <span>学分可以多修，不能少修</span>
+  </div>
+
+  <div class="topbar">
+    <div class="progress-area">
+      <div class="progress-head">
+        <span>总进度：<b id="p-cat">已完成 0 / 2 个类别</b></span>
+        <span>已修学分 <b id="p-credit">0</b> / <span id="goal-total">138</span></span>
+      </div>
+      <div class="bar" id="p-bar"><i style="width:0%"></i></div>
+    </div>
+    <button class="reset" id="btn-reset">重置全部</button>
+  </div>
+
+  <div class="done-banner" id="done-banner">已达到全部已设置的学分目标（仅供规划参考）</div>
+
+  <!-- 两个类别框 -->
+  <div class="zones">
+    <section class="zone" id="zone-public" data-cat="public">
+      <div class="zone-head">
+        <div class="zh-row1">
+          <div class="zh-title" id="title-public">公共基础课（专科）</div>
+          <span class="badge" id="badge-public">未达标</span>
+          <span class="zh-msg" id="msg-public"></span>
+        </div>
+        <div class="zh-stats">
+          <span>总学分 <b id="cred-public">0</b> / <span id="goal-public">49</span></span>
+          <span class="mini" id="mini-public-req">
+            <span>必修 <b id="cnt-public">0</b>/<span id="goal-public-count">26</span> 门</span>
+            <span class="bar"><i id="bar-public-req" style="width:0%"></i></span>
+          </span>
+          <span class="mini" id="mini-public-elec">
+            <span>选修 <b id="cnt-public-elec">0</b> 分</span>
+            <span class="bar"><i id="bar-public-elec" style="width:0%"></i></span>
+          </span>
+          <button class="mini-btn" id="btn-reset-public-elec" type="button"
+                  title="只清空公共基础课的选修课，全部退回待选课程池；不影响专业课">↺ 重置</button>
+        </div>
+      </div>
+      <div class="zone-body empty" id="body-public" data-ph="公共基础课的必修课会自动排入这里"></div>
+      <div class="zone-foot" id="foot-public">学分小计：0 分（还差 49 分）</div>
+    </section>
+
+    <section class="zone" id="zone-major" data-cat="major">
+      <div class="zone-head">
+        <div class="zh-row1">
+          <div class="zh-title" id="title-major">专业课</div>
+          <span class="badge" id="badge-major">未达标</span>
+          <span class="zh-msg" id="msg-major"></span>
+        </div>
+        <div class="zh-stats">
+          <span>总学分 <b id="cred-major">0</b> / <span id="goal-major">89</span></span>
+          <span class="mini" id="mini-req">
+            <span>必修 <b id="cnt-req">0</b>/<span id="goal-req-count">16</span> 门</span>
+            <span class="bar"><i id="bar-req" style="width:0%"></i></span>
+          </span>
+          <span class="mini" id="mini-elec">
+            <span>选修 <b id="cnt-elec">0</b> 分</span>
+            <span class="bar"><i id="bar-elec" style="width:0%"></i></span>
+          </span>
+          <button class="mini-btn" id="btn-reset-elec" type="button"
+                  title="只清空专业课的选修课，全部退回待选课程池；不影响公共基础课">↺ 重置</button>
+        </div>
+      </div>
+      <div class="zone-body empty" id="body-major" data-ph="把「专业课选修」的卡片拖到这里"></div>
+      <div class="zone-foot" id="foot-major">学分小计：0 分（还差 89 分）</div>
+    </section>
+  </div>
+
+  <!-- 课程池 -->
+  <section class="pool">
+    <div class="pool-head">
+      <h2>待选课程池 · <span id="title-pool">专业课选修</span></h2>
+      <span class="count" id="pool-count">0 门课程</span>
+    </div>
+    <p class="pool-desc">已按学期先后排列；<b>点击或拖拽卡片即可选课</b>，跨学期的课程拆成多张卡。</p>
+    <div class="pool-tools">
+      <button class="opt-chip" id="btn-exclude-en" type="button" aria-pressed="false"
+              title="开启后不显示名称含「全英文」的选修课，已选中的会一并退课（必修课不受影响）">排除全英文授课</button>
+      <button class="opt-chip" id="btn-exclude-com" type="button" aria-pressed="false"
+              title="开启后不显示名称含「企业」的选修课，已选中的会一并退课（必修课不受影响）">排除企业课程</button>
+      <button class="opt-chip plain" id="btn-filter-reset" type="button"
+              title="把上面两个筛选器都恢复为关闭状态">重置筛选</button>
+    </div>
+    <div class="pool-body" id="pool-body"></div>
+  </section>
+
+  <!-- 页面最底部：生成选课表 -->
+  <div class="bottom-actions">
+    <button class="gen-btn" id="btn-gen-bottom" type="button">生成选课表</button>
+    <p class="bottom-hint" id="bottom-hint"></p>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- 返回顶部 -->
+<button class="to-top" id="btn-top" type="button" aria-label="返回网页顶部" title="返回顶部">↑</button>
+
+<!-- 选修学分达标提示框 -->
+<div class="modal-mask" id="modal-elec" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">🎉</div>
+    <h3 class="modal-title" id="modal-title">您已选择足够的选修学分</h3>
+    <p class="modal-text" id="modal-text"></p>
+    <div class="modal-actions">
+      <button class="modal-btn" id="modal-schedule" type="button"
+              title="按学期生成一张选课表">生成选课表</button>
+      <button class="modal-btn primary" id="modal-close" type="button">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 学分不足提示框 -->
+<div class="modal-mask" id="modal-warn" role="dialog" aria-modal="true" aria-labelledby="warn-title" hidden>
+  <div class="modal">
+    <div class="modal-icon" aria-hidden="true">⚠️</div>
+    <h3 class="modal-title" id="warn-title">学分还没修够</h3>
+    <p class="modal-text" id="warn-text"></p>
+    <div class="modal-actions">
+      <button class="modal-btn primary" id="warn-close" type="button">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 选课表（覆盖在网页之上的白色图层） -->
+<div class="schedule" id="schedule" role="dialog" aria-modal="true" aria-labelledby="schedule-title" hidden>
+  <div class="schedule-head">
+    <button class="back-btn no-print" id="schedule-back" type="button" aria-label="返回并关闭选课表">← 返回</button>
+    <div class="schedule-titles">
+      <h2 class="schedule-title" id="schedule-title">我的选课表</h2>
+      <p class="schedule-sub" id="schedule-sub"></p>
+    </div>
+    <div class="schedule-legend">
+      <span class="lg lg-pub">公共必修</span>
+      <span class="lg lg-pub-elec">公共选修</span>
+      <span class="lg lg-req">专业必修</span>
+      <span class="lg lg-elec">专业选修</span>
+    </div>
+    <button class="pdf-btn no-print" id="btn-export-pdf" type="button"
+            title="导出为 PDF：打开打印窗口后，把「目标 / 打印机」选为「另存为 PDF」即可保存">⤓ 导出 PDF</button>
+  </div>
+  <div class="schedule-body" id="schedule-body">
+    <table class="schedule-table" id="schedule-table"></table>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ★ 前后端对接说明（EnoughPoints 本地版）
+   ------------------------------------------------------------------
+   本文件同时承担两个角色：既是「可直接双击打开的单页应用」，也是
+   「由后端提供课程数据的主应用」。
+
+     · 直接打开本文件：使用下面这段内置示例数据（原单页版本的数据）。
+     · 通过后端地址 /planner?id=<方案 id> 打开：后端会在本脚本之前注入
+           window.__ENOUGH_POINTS__ = { name, courses, goal }
+       此时一律采用后端注入的数据（来源＝导入窗口解析并确认的 Excel），
+       下面这段内置数据只作兜底，不参与计算。
+
+   注入数据的字段与下方 COURSES 完全一致：
+     id 唯一标识 / name 课程名称 / cat 类别框('public' | 'major')
+     type 必修·选修 / attr 卡片属性标签 / credit 学分 / term 学期（'1,2'）
+   =========================================================
+   内置示例数据来源：教学一体化服务平台.xlsx →「课程设置总表」子表
+   已逐行核对下列字段（课程行 3–28 公共基础课；30–66 专业课）：
+     C 课程编号 → id / D 课程名称 → name / F 课程属性 → attr
+     G 课程性质 → type（必修·选修）/ H 学分 → credit / N 开设学期 → term
+   公共基础课 26 门 = 49 学分（全部必修）
+   专业课 必修 16 门 = 74 学分 / 选修 21 门 = 69 学分
+   合计 63 门 = 192 学分（小计 49 + 143 ✓、合计 192 ✓）
+
+   跨学期课程（term 含多个学期，页面会按学期复制成多张卡片）：
+     劳动 1,2,3,4 · 体能测试 1,3,5 · 职业生涯发展与就业指导 1,2,5
+     英语强化课程 1,2 · 英语语言技能（全英文）1,2 · 岗位实习 5,6
+     学术英语（全英文）3,4
+   注意：term 一律写成学期升序；表中「体能测试」原为 3,1,5，已整理为 1,3,5。
+   ========================================================= */
+/* 后端注入的数据对象；直接打开本文件时为 null，回退到下面的内置示例数据 */
+let INJECTED = (typeof window !== 'undefined' && window.__ENOUGH_POINTS__) || null;
+const COURSES = (INJECTED && Array.isArray(INJECTED.courses) && INJECTED.courses.length ? INJECTED.courses : [
+  /* ---------- 公共基础课（专科）· 26 门 · 49 学分 ---------- */
+  {id:'05010111283', name:'智能内核与实体创造（专）',                 cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'2'},
+  {id:'0501011135',  name:'体能测试',                                 cat:'public', type:'必修', attr:'公共基础课', credit:0.5, term:'1,3,5'},
+  {id:'05010124921', name:'体育1',                                    cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1'},
+  {id:'05010124922', name:'体育2',                                    cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'2'},
+  {id:'05010124923', name:'体育3',                                    cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'3'},
+  {id:'0601010755',  name:'军事技能',                                 cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1'},
+  {id:'0601010761',  name:'劳动',                                     cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1,2,3,4'},
+  {id:'0601010783',  name:'劳动专题教育',                             cat:'public', type:'必修', attr:'公共基础课', credit:1,   term:'1'},
+  {id:'0601011623',  name:'大学生健康与安全教育',                     cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'2'},
+  {id:'0601012110',  name:'军事理论',                                 cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'2'},
+  {id:'0701016430',  name:'人工智能导论',                             cat:'public', type:'必修', attr:'公共基础课', credit:3.5, term:'2'},
+  {id:'0701017611',  name:'计算机学术技能（全英文）',                 cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1'},
+  {id:'10010111115', name:'毛泽东思想和中国特色社会主义理论体系概论', cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'3'},
+  {id:'10010111116', name:'思想道德与法治',                           cat:'public', type:'必修', attr:'公共基础课', credit:3,   term:'1'},
+  {id:'10010111117', name:'习近平新时代中国特色社会主义思想概论',   cat:'public', type:'必修', attr:'公共基础课', credit:3,   term:'4'},
+  {id:'10010111263', name:'形势与政策1',                              cat:'public', type:'必修', attr:'公共基础课', credit:0.2, term:'1'},
+  {id:'10010111264', name:'形势与政策2',                              cat:'public', type:'必修', attr:'公共基础课', credit:0.2, term:'2'},
+  {id:'10010111265', name:'形势与政策3',                              cat:'public', type:'必修', attr:'公共基础课', credit:0.2, term:'3'},
+  {id:'10010111266', name:'形势与政策4',                              cat:'public', type:'必修', attr:'公共基础课', credit:0.2, term:'4'},
+  {id:'10010111267', name:'形势与政策5',                              cat:'public', type:'必修', attr:'公共基础课', credit:0.2, term:'5'},
+  {id:'10010111273', name:'国家安全教育',                             cat:'public', type:'必修', attr:'公共基础课', credit:1,   term:'2'},
+  {id:'10010112072', name:'新时代实践教育（专）',                     cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'4'},
+  {id:'1101010251',  name:'创新创业基础',                             cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1'},
+  {id:'11010110014', name:'职业生涯发展与就业指导',                   cat:'public', type:'必修', attr:'公共基础课', credit:2,   term:'1,2,5'},
+  {id:'1401018436',  name:'英语强化课程',                             cat:'public', type:'必修', attr:'公共基础课', credit:6,   term:'1,2'},
+  {id:'1401019481',  name:'英语语言技能（全英文）',                   cat:'public', type:'必修', attr:'公共基础课', credit:4,   term:'1,2'},
+
+  /* ---------- 专业课 · 必修 16 门 · 74 学分 ---------- */
+  {id:'0101018854',  name:'岗位实习',                                 cat:'major', type:'必修', attr:'专业综合技能（含实践）课', credit:24, term:'5,6'},
+  {id:'0301016567',  name:'PCB设计与制作',                            cat:'major', type:'必修', attr:'专业核心课',               credit:2,  term:'2'},
+  {id:'0701014613',  name:'毕业设计',                                 cat:'major', type:'必修', attr:'专业综合技能（含实践）课', credit:4,  term:'5'},
+  {id:'0701016134',  name:'传感网应用开发',                           cat:'major', type:'必修', attr:'专业核心课',               credit:6,  term:'4'},
+  {id:'0701017610',  name:'LSEPIs法律、社会、道德与专业（全英文）',   cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:2, term:'4'},
+  {id:'0701017614',  name:'Java程序设计（全英文）',                   cat:'major', type:'必修', attr:'专业核心课',               credit:4,  term:'1'},
+  {id:'0701017618',  name:'数据结构（全英文）',                       cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:4, term:'2'},
+  {id:'0701017621',  name:'单片机应用',                               cat:'major', type:'必修', attr:'专业核心课',               credit:4,  term:'3'},
+  {id:'0701019488',  name:'数据库原理（全英文）',                     cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:4, term:'3'},
+  {id:'1401019229',  name:'Linux操作系统（全英文）',                  cat:'major', type:'必修', attr:'专业核心课',               credit:3,  term:'1'},
+  {id:'1401019230',  name:'计算机系统基础（全英文）',                 cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:3, term:'1'},
+  {id:'1401019231',  name:'数据分析（全英文）',                       cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:3, term:'3'},
+  {id:'1401019234',  name:'传感器技术及应用（全英文）',               cat:'major', type:'必修', attr:'专业核心课',               credit:2,  term:'4'},
+  {id:'1401019236',  name:'计算机网络基础（全英文）',                 cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:3, term:'2'},
+  {id:'1401019237',  name:'物联网操作系统（全英文）',                 cat:'major', type:'必修', attr:'专业群平台课（专业基础课）', credit:2, term:'3'},
+  {id:'1401019485',  name:'电子技术',                                 cat:'major', type:'必修', attr:'专业核心课',               credit:4,  term:'1'},
+
+  /* ---------- 专业课 · 选修 21 门 · 69 学分 ---------- */
+  {id:'0302016592',  name:'企业订单班课程（初级）',                   cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'3'},
+  {id:'0302016594',  name:'企业订单班课程（中级）',                   cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'4'},
+  {id:'07010110110', name:'智能体应用开发',                           cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'3'},
+  {id:'0701017622',  name:'android应用开发（全英文）',                cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'0702015562',  name:'物联网测试',                               cat:'major', type:'选修', attr:'专业拓展课', credit:2, term:'4'},
+  {id:'0702015572',  name:'物联网应用项目设计与分析',                 cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'0702016985',  name:'无人机操作与编程技术',                     cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'0702017016',  name:'企业定制课程(综合)',                       cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'4'},
+  {id:'0702017038',  name:'嵌入式系统设计',                           cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'0702017163',  name:'综合设计项目课程',                         cat:'major', type:'选修', attr:'专业拓展课', credit:2, term:'5'},
+  {id:'0702017509',  name:'Python程序设计',                           cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'3'},
+  {id:'0702017625',  name:'专业数学强化训练',                         cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'5'},
+  {id:'0702017626',  name:'QT应用开发',                               cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'4'},
+  {id:'0702017630',  name:'专业核心知＆技能强化训练',                 cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'5'},
+  {id:'1401019232',  name:'软件工程（全英文）',                       cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'4'},
+  {id:'1401019235',  name:'新一代信息技术（全英文）',                 cat:'major', type:'选修', attr:'专业拓展课', credit:2, term:'2'},
+  {id:'14020110806', name:'物联网服务器平台开发',                     cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'14020110807', name:'Linux C程序设计',                          cat:'major', type:'选修', attr:'专业拓展课', credit:3, term:'2'},
+  {id:'1402019238',  name:'嵌入式边缘计算软硬件开发技术及实践',       cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'3'},
+  {id:'1402019239',  name:'企业订制模块课（自动驾驶技术及应用）',     cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'5'},
+  {id:'1402019480',  name:'学术英语（全英文）',                       cat:'major', type:'选修', attr:'专业拓展课', credit:4, term:'3,4'}
+]);
+
+/* ================= 目标配置 =================
+   GOAL 同样由后端注入；注入缺失时使用下面这份与内置示例数据配套的目标。 */
+const GOAL = (INJECTED && INJECTED.goal) || {
+  total:138, elective:15,
+  public: { title:'公共基础课（专科）', target:49, courseCount:26 },
+  major:  { title:'专业课',             target:89, reqCount:16, reqCredits:74 }
+};
+/* 方案名称（后端注入；直接打开文件时用原单页标题） */
+let PLAN_NAME = (INJECTED && INJECTED.name) || '物联网应用技术（中外合办）';
+/* 顶部进度条的满格值 = 公基目标 + 专业课目标（示例数据即 49 + 89 = 138，而非全部课程总量 192） */
+const TOTAL_CREDIT = GOAL.total;
+
+/* ================= 状态 ================= */
+const PLACE = {};              // id -> 'pool' | 'public' | 'major'
+let suppressClick = false;
+let prevAllOk = false;
+let prevElecOk = false;        // 选修学分是否已达标（用于"刚达标就弹提示框"的上升沿判断）
+let lastMovedId = null;        // 最近一次被放入 / 退回的卡片，用于自动滚动定位
+
+/* 待选课程池筛选器（只影响可选课程＝专业选修；必修课必须保留，否则学分永远修不满）
+   新增筛选器只需往 FILTERS 里加一条，HTML 加同 id 的按钮即可。 */
+const isEnglishCourse = c => c.name.indexOf('全英文') !== -1;   // 全英文授课
+const isCompanyCourse = c => c.name.indexOf('企业')   !== -1;   // 企业（订单班 / 定制课等）
+const FILTERS = [
+  { key:'english', btn:'btn-exclude-en',  label:'全英文', match: isEnglishCourse },
+  { key:'company', btn:'btn-exclude-com', label:'企业',   match: isCompanyCourse }
+];
+const FILTER_ON = {};                       // key -> boolean
+FILTERS.forEach(f => FILTER_ON[f.key] = false);
+/* 是否被任一已开启的筛选器排除 */
+const isFilteredOut = c => FILTERS.some(f => FILTER_ON[f.key] && f.match(c));
+
+/* 必修课 = 固定课：开局直接排进所属类别框，且不可拖动 / 不可移出 */
+const isLocked = c => c.type === '必修';
+
+function resetAll(){
+  COURSES.forEach(c => PLACE[c.id] = isLocked(c) ? c.cat : 'pool');
+  prevAllOk = false;
+  prevElecOk = false;
+}
+resetAll();
+
+const $ = id => document.getElementById(id);
+const r1 = n => Math.round(n * 100) / 100;        // 显示最多两位小数；判定使用整数百分之一学分
+const fmt = n => (Math.round(n * 100) / 100).toString();
+/* 课程名称等文字来自导入的 Excel，插入页面前统一转义 */
+const esc = v => String(v ?? '').replace(/[&<>"']/g,
+  ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
+/* ================= 卡片模板 ================= */
+/* 学期号 → 年级描述：第 1~6 学期依次对应 大一上 / 大一下 / 大二上 / 大二下 / 大三上 / 大三下。
+   学期由导入的数据决定，超过 6 个学期时继续排到大四、大五…… */
+const GRADE_CN = ['一','二','三','四','五','六','七','八','九','十'];
+const TERM_GRADE = {};
+COURSES.forEach(c => String(c.term).split(',').forEach(raw => {
+  const t = parseInt(raw.trim(), 10);
+  if (!isNaN(t) && t > 0) TERM_GRADE[t] = `大${GRADE_CN[Math.ceil(t / 2) - 1] || Math.ceil(t / 2)}${t % 2 ? '上' : '下'}`;
+}));
+/* 选课表最少排到大三下（6 个学期），数据里更长的学期再往后加行 */
+const MAX_TERM = Math.max(6, 0, ...Object.keys(TERM_GRADE).map(Number));
+const termGrade = t => TERM_GRADE[t] || '';
+
+/* slot = { term, count, terms }：把多学期课程拆成多张卡时使用（term 为该卡对应的真实学期号） */
+function cardHTML(c, slot){
+  const locked = isLocked(c);
+  let cls = 'card';
+  if (c.cat === 'major') cls += (c.type === '必修' ? ' c-major-req' : ' c-major-elec');
+  else if (c.cat === 'public' && c.type === '选修') cls += ' c-public-elec';
+  if (locked) cls += ' locked';
+
+  const multi = !!slot && slot.count > 1;
+  // 学期标签统一写成「年级描述 + 真实学期号」，例如「大三上 · 第 5 学期」
+  // （不再用 1/2 这类进度式写法，避免误读；学期号在前文已说明按升序排列）
+  const grade = slot ? termGrade(slot.term) : '';
+  const termText = slot
+    ? (grade ? `${grade} · 第 ${slot.term} 学期` : `第 ${slot.term} 学期`)
+    : `学期 ${c.term}`;
+  const tip = (locked
+      ? `${c.name}（${c.attr} · 必修 · ${c.credit} 学分）— 必修课已自动排入，不可移动`
+      : `${c.name}（${c.attr} · 选修 · ${c.credit} 学分）— 拖进专业课框即可选课`)
+    + (grade ? `；开设时间：${grade}（第 ${slot.term} 学期）` : '')
+    + (multi ? `；本课程开设于第 ${slot.terms.join('、')} 学期，已按学期拆成 ${slot.count} 张卡（学分只计一次）` : '');
+
+  return `
+    <div class="${cls}" draggable="${locked ? 'false' : 'true'}" data-id="${esc(c.id)}" data-term="${slot ? slot.term : ''}" title="${esc(tip)}">
+      <div class="c-name">${esc(c.name)}</div>
+      <div class="c-meta">
+        <span class="tag t-type">${locked ? '🔒 ' : ''}${esc(c.type)}</span>
+        <span class="tag t-attr">${esc(c.attr)}</span>
+      </div>
+      <div class="c-foot">
+        <span class="c-credit"><b>${c.credit}</b>学分</span>
+        <span class="${locked ? 'c-lock' : 'c-term'}">${termText}</span>
+      </div>
+    </div>`;
+}
+
+/* 把课程列表展开成「一张卡 = 一个学期」，按学期升序排列；
+   同学期先必修再选修；同性质内先公共基础课再专业课，同组保持原顺序。
+   导入的 Excel 常常按课程编号排序，必修/选修是交错的，所以这里必须显式分组。 */
+function expandByTerm(list){
+  const out = [];
+  list.forEach((c, i) => {
+    const terms = String(c.term).split(',')
+      .map(t => parseInt(t.trim(), 10))
+      .filter(t => !isNaN(t))
+      .sort((a, b) => a - b);
+    const use = terms.length ? terms : [0];
+    const rank = isLocked(c) ? 0 : 1;      // 必修 0、选修 1
+    use.forEach(t => out.push({ c, term: t, count: use.length, terms: use, rank, order: i }));
+  });
+  return out.sort((a, b) => (a.term - b.term) || (a.rank - b.rank) || ((a.c.cat === 'major') - (b.c.cat === 'major')) || (a.order - b.order));
+}
+
+/* ================= 计算与渲染 ================= */
+function compute(){
+  const pub = COURSES.filter(c => c.cat === 'public' && PLACE[c.id] === 'public');
+  const maj = COURSES.filter(c => c.cat === 'major' && PLACE[c.id] === 'major');
+  const pubReq = pub.filter(c => c.type === '必修');
+  const pubElec = pub.filter(c => c.type === '选修');
+  const majReq = maj.filter(c => c.type === '必修');
+  const majElec = maj.filter(c => c.type === '选修');
+  const pubReqAll = COURSES.filter(c => c.cat === 'public' && c.type === '必修');
+  const pubElecAll = COURSES.filter(c => c.cat === 'public' && c.type === '选修');
+  const units = list => list.reduce((sum,c) => sum + Math.round(c.credit * 100), 0);
+  const pubUnits = units(pub), majUnits = units(maj);
+  const electiveUnits = units(pubElec) + units(majElec);
+  const checks = [
+    ['总学分', pubUnits + majUnits, GOAL.total],
+    ['选修学分（公共＋专业）', electiveUnits, GOAL.elective],
+    ['公共基础课', pubUnits, GOAL.public.target],
+    ['专业课', majUnits, GOAL.major.target]
+  ].filter(([, ,target]) => target != null).map(([label,actual,target]) => ({
+    label, actual:actual / 100, target, met:actual >= Math.round(target * 100),
+    gap:Math.max(0,Math.round(target * 100)-actual) / 100
+  }));
+  const meets = (actual,target) => target == null || actual >= Math.round(target * 100);
+  const reqOk = majReq.length === GOAL.major.reqCount;
+  const pubReqOk = pubReq.length === pubReqAll.length;
+  const credOk = meets(majUnits, GOAL.major.target);
+  const pubOk = pubReqOk && meets(pubUnits, GOAL.public.target);
+  const majOk = reqOk && credOk;
+  const status = !checks.length ? 'unknown' : checks.every(c=>c.met) && reqOk && pubReqOk ? 'met' : 'incomplete';
+  return {pub,maj,pubReq,pubElec,majReq,majElec,pubReqAll,pubElecAll,
+    pubCred:pubUnits/100,majCred:majUnits/100,reqCred:units(majReq)/100,
+    elecCred:units(majElec)/100,majElecCred:units(majElec)/100,
+    pubElecCred:units(pubElec)/100,pubElecAllCred:units(pubElecAll)/100,
+    total:(pubUnits+majUnits)/100,totalElective:electiveUnits/100,
+    checks,status,pubOk,majOk,reqOk,credOk};
+}
+function targetText(value){ return value == null ? '未设置' : fmt(value); }
+function percent(actual,target){ return target == null ? '0%' : target === 0 ? '100%' : Math.min(100,actual/target*100)+'%'; }
+function remainingText(s){return s.checks.filter(c=>!c.met).map(c=>`${c.label}还差 ${fmt(c.gap)} 分`).join('；');}
+
+function render(){
+  const s = compute();
+
+  /* --- 待选课程池：只剩需要自己挑的选修课，同样按学期拆分并升序排列 --- */
+  const poolAll = COURSES.filter(c => PLACE[c.id] === 'pool');
+  /* 筛选器只作用于可选课程（选修），必修课必须保留否则学分永远修不满 */
+  const activeFilters = FILTERS.filter(f => FILTER_ON[f.key]);
+  const poolList = activeFilters.length ? poolAll.filter(c => !isFilteredOut(c)) : poolAll;
+  const hiddenByFilter = poolAll.length - poolList.length;
+  /* 各筛选器分别排除了几门（文案更清楚，例如「全英文 4 + 企业 4」） */
+  const hiddenBreak = activeFilters
+    .map(f => ({ label: f.label, n: poolAll.filter(f.match).length }))
+    .filter(x => x.n > 0)
+    .map(x => `${x.label} ${x.n}`)
+    .join(' + ');
+  const poolSlots = expandByTerm(poolList);
+  const poolBody = $('pool-body');
+  poolBody.innerHTML = poolSlots.length
+    ? poolSlots.map(s => cardHTML(s.c, s)).join('')
+    : `<div class="pool-empty">${hiddenByFilter ? `课程已被筛选器排除 ${hiddenByFilter} 门，暂无可选课程` : '暂无待选课程，请核对已选课程与目标'}</div>`;
+  $('pool-count').textContent =
+    `${poolList.length} 门课程 · 按学期拆成 ${poolSlots.length} 张卡` +
+    (hiddenByFilter ? `（已排除 ${hiddenByFilter} 门：${hiddenBreak}）` : '');
+  /* 没有任何筛选器开启时，「重置筛选」置灰 */
+  $('btn-filter-reset').classList.toggle('empty', activeFilters.length === 0);
+
+  /* --- 两个类别框（框内按学期升序排列，多学期课程拆成多张卡；同学期保持原表顺序，必修在前） --- */
+  const pubCards = renderZone('public', s.pub);
+  const majCards = renderZone('major', s.maj);
+
+  // 类别目标只约束本类总分，不要求选完所有选修。
+  const pubReqCredits = r1(s.pubCred-s.pubElecCred);
+  const pubNeed = GOAL.public.target == null ? null : Math.max(0,r1(GOAL.public.target-pubReqCredits));
+  const majorNeed = GOAL.major.target == null ? null : Math.max(0,r1(GOAL.major.target-GOAL.major.reqCredits));
+  for(const cat of ['public','major']){
+    const actual=cat==='public'?s.pubCred:s.majCred;
+    const target=GOAL[cat].target;
+    const ok=cat==='public'?s.pubOk:s.majOk;
+    const gap=target==null?0:Math.max(0,r1(target-actual));
+    $( 'badge-'+cat).textContent=target==null?'目标未设置':ok?'已达标 ✓':'未达标';
+    $( 'zone-'+cat).classList.toggle('ok',target!=null&&ok);
+    $( 'cred-'+cat).textContent=fmt(actual);
+    $( 'msg-'+cat).textContent=target==null?'必修已自动排入；类别目标未设置':ok?'已达到该类别目标':`还需 ${fmt(gap)} 学分`;
+    $( 'foot-'+cat).textContent=`学分小计：${fmt(actual)} 分（必修 ${fmt(cat==='public'?pubReqCredits:s.reqCred)} + 选修 ${fmt(cat==='public'?s.pubElecCred:s.elecCred)}）· 按学期排成 ${cat==='public'?pubCards:majCards} 张卡（学分只计一次）`;
+  }
+  $('cnt-public').textContent=s.pubReq.length;
+  $('cnt-public-elec').textContent=fmt(s.pubElecCred);
+  $('bar-public-req').style.width=percent(s.pubReq.length,s.pubReqAll.length);
+  $('bar-public-elec').style.width=percent(s.pubElecCred,pubNeed);
+  $('mini-public-req').classList.toggle('done',s.pubReq.length===s.pubReqAll.length);
+  $('mini-public-elec').classList.toggle('done',pubNeed!=null&&s.pubElecCred>=pubNeed);
+  $('btn-reset-public-elec').classList.toggle('empty',!s.pubElec.length);
+  $('cnt-req').textContent=s.majReq.length;
+  $('cnt-elec').textContent=fmt(s.elecCred);
+  $('bar-req').style.width=percent(s.majReq.length,GOAL.major.reqCount);
+  $('bar-elec').style.width=percent(s.elecCred,majorNeed);
+  $('mini-req').classList.toggle('done',s.reqOk);
+  $('mini-elec').classList.toggle('done',majorNeed!=null&&s.elecCred>=majorNeed);
+  $('btn-reset-elec').classList.toggle('empty',!s.majElec.length);
+
+  const electiveCheck=s.checks.find(c=>c.label==='选修学分（公共＋专业）');
+  const elecOk=!!electiveCheck?.met;
+  if(elecOk&&!prevElecOk&&lastMovedId){
+    if(s.status==='met')openElecModal(s);else openWarnModal(s);
+  }
+  prevElecOk=elecOk;
+  const allOk=s.status==='met';
+  $('p-cat').textContent=s.status==='unknown'?'目标未设置':`已满足 ${s.checks.filter(c=>c.met).length} / ${s.checks.length} 项已设目标`;
+  $('p-credit').textContent=fmt(s.total);
+  $('p-bar').classList.toggle('allok',allOk);
+  $('p-bar').firstElementChild.style.width=percent(s.total,TOTAL_CREDIT);
+  $('done-banner').classList.toggle('show',allOk);
+  if(allOk&&!prevAllOk)toast('已达到全部已设置的学分目标');
+  prevAllOk=allOk;
+  $('bottom-hint').textContent=s.status==='unknown'?'尚未设置学分目标，可以生成标注“目标未填写”的规划草案':
+    allOk?'已达到全部已设置目标，可以生成选课表':remainingText(s)+'；满足后才能生成选课表';
+  $('bottom-hint').classList.toggle('ok',allOk);
+
+  bindCardEvents();
+  revealLastMoved();
+}
+
+/* 让刚放入 / 退回的那张卡片滚进可视范围（只滚动框内，不动整页） */
+function revealLastMoved(){
+  if (!lastMovedId) return;
+  const el = document.querySelector('.card[data-id="' + lastMovedId + '"]');
+  lastMovedId = null;
+  if (!el) return;
+  const box = el.closest('.zone-body');
+  if (!box) { el.scrollIntoView({block:'nearest'}); return; }
+  const b = box.getBoundingClientRect(), r = el.getBoundingClientRect();
+  if (r.top < b.top || r.bottom > b.bottom) box.scrollTop += (r.top - b.top) - 10;
+}
+
+/* 渲染一个类别框；返回实际渲染出的卡片张数（多学期课程会拆成多张） */
+function renderZone(cat, list){
+  const body = $('body-' + cat);
+  const slots = expandByTerm(list);
+  body.innerHTML = slots.map(s => cardHTML(s.c, s)).join('');
+  body.classList.toggle('empty', slots.length === 0);
+  return slots.length;
+}
+
+/* ================= 交互：拖拽 ================= */
+function bindCardEvents(){
+  document.querySelectorAll('.card').forEach(el => {
+    const course = COURSES.find(c => c.id === el.dataset.id);
+    if (!course) return;
+
+    /* 必修课：固定卡片，不绑定任何拖拽 / 点击操作 */
+    if (isLocked(course)){
+      el.addEventListener('mousedown', () => toast(`《${course.name}》是必修课，已固定排入，不可移动`));
+      return;
+    }
+
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', el.dataset.id);
+      e.dataTransfer.effectAllowed = 'move';
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      suppressClick = true;
+      setTimeout(() => suppressClick = false, 60);
+    });
+    el.addEventListener('click', () => {
+      if (suppressClick) return;
+      const id = el.dataset.id;
+      if (PLACE[id] === 'pool'){
+        PLACE[id] = course.cat;                     // 点击 → 选课，放进所属类别
+        toast(`已选《${course.name}》+${course.credit} 学分`);
+      } else {
+        PLACE[id] = 'pool';                         // 点击 → 退课，退回课程池
+        toast(`已退课《${course.name}》-${course.credit} 学分`);
+      }
+      lastMovedId = id;
+      render();
+    });
+  });
+}
+
+function setupDropZones(){
+  document.querySelectorAll('.zone').forEach(zone => {
+    const cat = zone.dataset.cat;
+    const body = zone.querySelector('.zone-body');
+
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('over');
+    });
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) zone.classList.remove('over');
+    });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('over');
+      const id = e.dataTransfer.getData('text/plain');
+      const course = COURSES.find(c => c.id === id);
+      if (!course) return;
+
+      if (isLocked(course)){                        // 必修课固定，不接受搬动
+        zone.classList.add('deny');
+        setTimeout(() => zone.classList.remove('deny'), 400);
+        toast(`《${course.name}》是必修课，已固定排入，不可移动`);
+        return;
+      }
+      if (course.cat !== cat){
+        zone.classList.add('deny');
+        setTimeout(() => zone.classList.remove('deny'), 400);
+        toast(`《${course.name}》属于${course.cat === 'public' ? '公共基础课' : '专业课'}，不能放进这里`);
+        return;
+      }
+      if (PLACE[id] === cat) return;
+      PLACE[id] = cat;
+      lastMovedId = id;
+      toast(`已选《${course.name}》+${course.credit} 学分`);
+      render();
+    });
+  });
+
+  /* 课程池也是放置区：可以把选修课拖回来退课 */
+  const poolBody = $('pool-body');
+  poolBody.addEventListener('dragover', e => { e.preventDefault(); poolBody.classList.add('over'); });
+  poolBody.addEventListener('dragleave', e => { if (!poolBody.contains(e.relatedTarget)) poolBody.classList.remove('over'); });
+  poolBody.addEventListener('drop', e => {
+    e.preventDefault();
+    poolBody.classList.remove('over');
+    const id = e.dataTransfer.getData('text/plain');
+    const course = COURSES.find(c => c.id === id);
+    if (!course || isLocked(course)) return;
+    if (PLACE[id] !== 'pool'){
+      PLACE[id] = 'pool';
+      lastMovedId = id;
+      toast(`已退课《${course.name}》-${course.credit} 学分`);
+      render();
+    }
+  });
+}
+
+/* ================= 交互：重置 / 提示 ================= */
+/* 把「某个类别框」里已选的选修课退回课程池。cat 限定作用范围：
+   公共基础课框里的重置只碰公共基础课，专业课框同理，两者互不影响。 */
+function clearElectives(cat){
+  const picked = COURSES.filter(c => c.type === '选修' && PLACE[c.id] === cat);
+  if (!picked.length) return 0;
+  picked.forEach(c => PLACE[c.id] = 'pool');
+  return picked.length;
+}
+
+function setupReset(){
+  /* 顶部：重置全部 */
+  $('btn-reset').addEventListener('click', () => {
+    resetAll();
+    render();
+    toast('已重置：选修课全部退回课程池');
+  });
+
+  /* 专业课框内：只重置专业课的选修课 */
+  $('btn-reset-elec').addEventListener('click', () => {
+    const n = clearElectives('major');
+    if (!n){ toast('专业课里还没有选选修课，无需重置'); return; }
+    render();
+    toast(`已重置：${n} 门专业课选修退回待选课程池`);
+  });
+
+  /* 公共基础课框内：只重置公共基础课的选修课，不影响专业课 */
+  $('btn-reset-public-elec').addEventListener('click', () => {
+    const n = clearElectives('public');
+    if (!n){ toast('公共基础课里还没有选选修课，无需重置'); return; }
+    render();
+    toast(`已重置：${n} 门公共基础课选修退回待选课程池`);
+  });
+}
+
+/* ================= 交互：待选课程池筛选器（可多个并存，各自独立开关） ================= */
+function setupFilter(){
+  FILTERS.forEach(f => {
+    const btn = $(f.btn);
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      FILTER_ON[f.key] = !FILTER_ON[f.key];
+      btn.setAttribute('aria-pressed', FILTER_ON[f.key] ? 'true' : 'false');
+
+      /* 开启筛选时，把已经选进专业课框的同类选修一并退课（必修课不受影响） */
+      let dropped = 0;
+      if (FILTER_ON[f.key]){
+        COURSES.forEach(c => {
+          if (c.type === '选修' && f.match(c) && PLACE[c.id] === 'major'){
+            PLACE[c.id] = 'pool';
+            dropped++;
+          }
+        });
+        if (dropped) prevElecOk = false;   // 退课后重新按上升沿判断达标
+      }
+      render();
+      toast(FILTER_ON[f.key]
+        ? `已排除${f.label}课程${dropped ? `，并退掉 ${dropped} 门已选的${f.label}选修` : ''}`
+        : `已取消排除，${f.label}选修课重新可选`);
+    });
+  });
+
+  /* 重置筛选：把所有筛选器恢复为关闭（已退掉的课不会自动选回，只是重新出现在课程池里） */
+  $('btn-filter-reset').addEventListener('click', () => {
+    const wasOn = FILTERS.filter(f => FILTER_ON[f.key]);
+    if (!wasOn.length){
+      toast('两个筛选器都处于关闭状态，无需重置');
+      return;
+    }
+    FILTERS.forEach(f => {
+      FILTER_ON[f.key] = false;
+      const b = $(f.btn);
+      if (b) b.setAttribute('aria-pressed', 'false');
+    });
+    render();
+    toast(`已重置筛选：${wasOn.map(f => f.label).join('、')}选修课重新可选`);
+  });
+}
+
+/* ================= 交互：返回顶部 ================= */
+function setupToTop(){
+  const btn = $('btn-top');
+  const sentinel = document.querySelector('.topbar');
+
+  /* 统一由一个函数按实时几何判定，scroll / resize / IntersectionObserver 都调它，
+     避免多个触发源各自判断导致抖动。 */
+  function update(){
+    const y = window.scrollY || window.pageYOffset ||
+              (document.documentElement && document.documentElement.scrollTop) || 0;
+    let show = y > 160;
+    if (sentinel){
+      const r = sentinel.getBoundingClientRect();
+      if (r.bottom < 0) show = true;        // 顶部栏已完全滚出视野
+      if (y <= 0) show = false;             // 回到顶部一定隐藏
+    }
+    btn.classList.toggle('show', show);
+  }
+
+  btn.addEventListener('click', () => {
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    catch (e) { window.scrollTo(0, 0); }
+    /* 兜底：平滑滚动被禁用时也要回到顶部 */
+    setTimeout(() => { if ((window.scrollY || 0) > 4) window.scrollTo(0, 0); }, 600);
+    setTimeout(update, 700);
+  });
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  if (sentinel && typeof IntersectionObserver === 'function'){
+    new IntersectionObserver(update, { threshold: [0, 1] }).observe(sentinel);
+  }
+  update();
+}
+
+/* ================= 交互：弹窗（达标提示 / 学分不足提示） ================= */
+/* 弹出提示框那一刻的选课状态快照，选课表返回时用它还原 */
+let stateSnapshot = null;
+
+/* 弹窗显隐的公共实现（带淡入淡出） */
+const modalHideTimers = {};
+function showModal(id){
+  const m = $(id);
+  clearTimeout(modalHideTimers[id]);
+  m.hidden = false;
+  requestAnimationFrame(() => m.classList.add('show'));
+}
+function hideModal(id){
+  const m = $(id);
+  if (m.hidden) return;
+  m.classList.remove('show');
+  clearTimeout(modalHideTimers[id]);
+  modalHideTimers[id] = setTimeout(() => { m.hidden = true; }, 220);
+}
+
+function openElecModal(s){
+  $('modal-text').textContent=`公共选修与专业选修合计 ${fmt(s.totalElective)} 分，选修目标 ${targetText(GOAL.elective)} 分；全部已设置目标均已满足。`;
+  stateSnapshot = Object.assign({}, PLACE);
+  showModal('modal-elec');
+  setTimeout(() => { try { $('modal-close').focus(); } catch (e) {} }, 60);
+}
+function closeElecModal(){ hideModal('modal-elec'); }
+
+/* 学分不足提示：公共基础课、专业课各自列出还差多少，差额一律取 0 以上，不出现负数 */
+function openWarnModal(s){
+  $('warn-text').textContent=s.status==='unknown'?'目标未填写，只能生成规划草案':remainingText(s)+'。请核对课程与目标；所有已设置目标都满足后才能生成选课表。';
+  showModal('modal-warn');
+  setTimeout(() => { try { $('warn-close').focus(); } catch (e) {} }, 60);
+}
+function closeWarnModal(){ hideModal('modal-warn'); }
+
+function setupModal(){
+  $('modal-close').addEventListener('click', closeElecModal);
+  $('warn-close').addEventListener('click', closeWarnModal);
+
+  /* 进入选课表的唯一入口：两个类别都达标才放行，否则改为弹出不足提示 */
+  function tryOpenSchedule(){
+    const st = compute();
+    if (st.status === 'incomplete'){
+      closeElecModal();
+      openWarnModal(st);
+      return;
+    }
+    stateSnapshot = Object.assign({}, PLACE);
+    closeElecModal();
+    openSchedule();
+  }
+  $('modal-schedule').addEventListener('click', tryOpenSchedule);
+  $('btn-gen-bottom').addEventListener('click', tryOpenSchedule);
+
+  /* 点击遮罩也可关闭 */
+  $('modal-elec').addEventListener('click', e => { if (e.target === $('modal-elec')) closeElecModal(); });
+  $('modal-warn').addEventListener('click', e => { if (e.target === $('modal-warn')) closeWarnModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!$('schedule').hidden) closeSchedule(true);        // 选课表打开时优先关它
+    else if (!$('modal-elec').hidden) closeElecModal();
+    else if (!$('modal-warn').hidden) closeWarnModal();
+  });
+}
+
+/* ================= 交互：生成选课表 ================= */
+/* 横排 = 上学期 / 下学期；竖排 = 大一 / 大二 / 大三 → 对应第 1~6 学期。
+   学期数按导入的数据生成：示例数据固定 3 行，学期更多时自动加行。 */
+const TERM_ROWS = [];
+for (let t = 1; t <= MAX_TERM; t += 2) {
+  TERM_ROWS.push({ grade: `大${GRADE_CN[Math.ceil(t / 2) - 1] || Math.ceil(t / 2)}`, terms: [t, t + 1] });
+}
+
+function chipType(c){
+  if (c.cat === 'public') return c.type === '必修' ? 's-pub' : 's-public-elec';
+  return c.type === '必修' ? 's-req' : 's-elec';
+}
+
+function buildScheduleHTML(){
+  // 只统计已经排进两个类别框里的课程，并按学期拆分（与卡片展示规则一致）
+  const placed = COURSES.filter(c => PLACE[c.id] !== 'pool');
+  const slots = expandByTerm(placed);
+  const byTerm = {};
+  slots.forEach(s => { (byTerm[s.term] = byTerm[s.term] || []).push(s); });
+
+  let html = '<thead><tr><th class="corner">年级</th><th>上学期</th><th>下学期</th></tr></thead><tbody>';
+  TERM_ROWS.forEach(row => {
+    html += `<tr><th class="rowhead">${row.grade}</th>`;
+    row.terms.forEach(t => {
+      const list = byTerm[t] || [];
+      html += `<td><div class="cell-head">第 ${t} 学期 · ${list.length} 门</div><div class="cell-list">`;
+      html += list.length
+        ? list.map(s => `<span class="s-chip ${chipType(s.c)}" title="${esc(s.c.name)}（${s.c.credit} 学分）">${esc(s.c.name)}</span>`).join('')
+        : '<span class="cell-empty">本学期无课程</span>';
+      html += '</div></td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  return { html, courseCount: placed.length, slots: slots.length };
+}
+
+/* ================= 打印范围控制（导出 PDF 只输出选课表） =================
+   只在选课表打开期间往 <head> 注入一份 media="print" 的样式表：
+   - 好处 1：主页面正常打印不受影响（@page 无法用选择器限定范围，只能靠"存在与否"控制）
+   - 好处 2：图层从 fixed/flex 改成文档流普通 block，否则跨页会被浏览器裁掉、只能打出可视区那一屏
+———————————————————————————————————— */
+const SCHEDULE_PRINT_CSS = `
+  @page{ size: A4 landscape; margin: 10mm; }
+  html, body{ background:#fff !important; }
+  /* 主页面、浮动按钮、提示条、弹窗全部不打印 */
+  .wrap, #toast, .to-top, .modal-mask{ display:none !important; }
+  .schedule{
+    position:static !important; inset:auto !important;
+    display:block !important; opacity:1 !important; transform:none !important;
+    background:#fff !important;
+  }
+  .schedule-head{ border-bottom:1px solid #e2e8f0; padding:0 0 10px; margin-bottom:12px; }
+  .no-print{ display:none !important; }          /* 返回 / 导出按钮不进 PDF */
+  /* 去掉滚动容器与吸顶，58 张课程卡片才能全部打出来 */
+  .schedule-body{ overflow:visible !important; max-height:none !important; padding:0 !important; }
+  .schedule-table{ width:100% !important; }
+  .schedule-table thead{ display:table-header-group; }   /* 表头每页重复 */
+  .schedule-table thead th{ position:static !important; }
+  /* 一个年级一行，整行不跨页断开（否则行标签留在上一页，下一页只剩课程） */
+  tr{ break-inside:avoid; page-break-inside:avoid; }
+  .s-chip{ break-inside:avoid; page-break-inside:avoid; }  /* 单张课程不跨页断开 */
+  .cell-list{ gap:3px; }
+`;
+let printScopeEl = null;
+
+function enablePrintScope(){
+  if (printScopeEl) return;
+  printScopeEl = document.createElement('style');
+  printScopeEl.id = 'schedule-print-scope';
+  printScopeEl.setAttribute('media', 'print');
+  printScopeEl.textContent = SCHEDULE_PRINT_CSS;
+  document.head.appendChild(printScopeEl);
+}
+function disablePrintScope(){
+  if (!printScopeEl) return;
+  printScopeEl.remove();
+  printScopeEl = null;
+}
+
+function openSchedule(){
+  const { html, courseCount, slots } = buildScheduleHTML();
+  $('schedule-table').innerHTML = html;
+  const c = compute();
+  $('schedule-sub').textContent =
+    `${c.status==='unknown'?'规划草案 · 目标未填写':'已达到全部已设置的学分目标'} · 共 ${courseCount} 门课程（按学期拆成 ${slots} 张课次）· 合计 ${fmt(c.total)} 学分 · 覆盖第 1–${MAX_TERM} 学期`;
+
+  const el = $('schedule');
+  el.hidden = false;
+  requestAnimationFrame(() => el.classList.add('show'));
+  enablePrintScope();          // 打开期间才让"只打印选课表"生效（含用户自己按 ⌘P）
+  $('schedule-body').scrollTop = 0;
+  setTimeout(() => { try { $('schedule-back').focus(); } catch (e) {} }, 60);
+}
+
+/* restore = true 时还原到"弹出框触发时"的选课状态，并清空表格元素 */
+function closeSchedule(restore){
+  const el = $('schedule');
+  if (el.hidden) return;
+  el.classList.remove('show');
+  disablePrintScope();
+  setTimeout(() => {
+    el.hidden = true;
+    $('schedule-table').innerHTML = '';      // 清理页面元素
+    $('schedule-sub').textContent = '';
+  }, 240);
+  if (restore && stateSnapshot){
+    COURSES.forEach(c => { if (stateSnapshot[c.id]) PLACE[c.id] = stateSnapshot[c.id]; });
+    stateSnapshot = null;
+    render();
+  }
+}
+
+/* ================= 交互：导出 PDF =================
+   浏览器不允许脚本静默落盘，所以走「打印对话框 → 另存为 PDF」这条标准路径：
+   - 打印范围靠 enablePrintScope() 注入的 media="print" 样式表收窄成「只有选课表」
+   - 打印文件名默认取文档标题，因此打印期间临时改写 document.title
+———————————————————————————————————— */
+function exportSchedulePDF(){
+  if ($('schedule').hidden){ toast('请先生成选课表'); return; }
+
+  const prevTitle = document.title;
+  document.title = `${PLAN_NAME} · 选课表`;
+
+  let restored = false;
+  const restoreTitle = () => {
+    if (restored) return;
+    restored = true;
+    document.title = prevTitle;
+    window.removeEventListener('afterprint', restoreTitle);
+  };
+  window.addEventListener('afterprint', restoreTitle);
+  setTimeout(restoreTitle, 120000);        // 兜底：少数浏览器不派发 afterprint
+
+  toast('已打开打印窗口：把「目标 / 打印机」选为「另存为 PDF」即可保存');
+  try {
+    window.print();
+  } catch (e) {
+    restoreTitle();
+    toast('当前环境不支持直接唤起打印，请按 ⌘P / Ctrl+P 手动导出');
+  }
+}
+
+function setupSchedule(){
+  $('schedule-back').addEventListener('click', () => closeSchedule(true));
+  $('btn-export-pdf').addEventListener('click', exportSchedulePDF);
+}
+
+let toastTimer = null;
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+}
+
+/* ================= ★ 前后端对接：把目标值写进页面上的固定文案 =================
+   GOAL / PLAN_NAME 由后端注入（见文件开头说明）；页面上原本写死的达标线数字
+   统一在这里赋值，交互逻辑不变。 */
+function applyGoal(){
+  const p=GOAL.public,m=GOAL.major;
+  $('page-title').textContent=PLAN_NAME;
+  $('title-public').textContent=p.title;
+  $('title-major').textContent=m.title;
+  $('title-pool').textContent='公共与专业选修';
+  $('rule-pick-label').textContent='公共与专业选修课';
+  $('rule-targets').textContent=`目标：总学分 ${targetText(GOAL.total)}；选修合计 ${targetText(GOAL.elective)}；公共基础课 ${targetText(p.target)}；专业课 ${targetText(m.target)}（空白目标不参与达标判断）`;
+  $('goal-total').textContent=targetText(TOTAL_CREDIT);
+  $('goal-public').textContent=targetText(p.target);
+  $('goal-major').textContent=targetText(m.target);
+  $('goal-public-count').textContent=fmt(COURSES.filter(c=>c.cat==='public'&&c.type==='必修').length);
+  $('goal-req-count').textContent=fmt(m.reqCount);
+  $('body-major').setAttribute('data-ph','把专业选修课拖到这里');
+  document.title=`${PLAN_NAME} · 选课学分规划`;
+}
+
+/* 数据仅保留在当前页面；退出时清空内存与 DOM，禁止后退缓存恢复。 */
+function clearPageData(){
+  COURSES.length = 0;
+  Object.keys(PLACE).forEach(id => delete PLACE[id]);
+  INJECTED = null;
+  PLAN_NAME = '';
+  delete window.__ENOUGH_POINTS__;
+  stateSnapshot = null;
+  document.title = 'EnoughPoints';
+  document.body.replaceChildren();
+}
+$('btn-delete-data').addEventListener('click', () => {
+  clearPageData();
+  location.replace('/');
+});
+window.addEventListener('pagehide', clearPageData);
+window.addEventListener('pageshow', e => { if(e.persisted) location.replace('/'); });
+document.getElementById('course-data')?.remove();
+delete window.__ENOUGH_POINTS__;
+if(INJECTED) history.replaceState(null, '', '/planner');
+
+/* ================= 启动 ================= */
+applyGoal();
+setupDropZones();
+setupReset();
+setupFilter();
+setupToTop();
+setupModal();
+setupSchedule();
+render();
+
+/* 控制台自检（数据一致性） */
+(function selfCheck(){
+  const sum = (list) => r1(list.reduce((s,c)=>s+c.credit,0));
+  const pub = COURSES.filter(c=>c.cat==='public');
+  const mreq = COURSES.filter(c=>c.cat==='major' && c.type==='必修');
+  const melec= COURSES.filter(c=>c.cat==='major' && c.type==='选修');
+  console.log('[自检] 课程总数', COURSES.length,
+    '| 公共基础课', pub.length, sum(pub),
+    '| 专业必修', mreq.length, sum(mreq),
+    '| 专业选修', melec.length, sum(melec),
+    '| 合计', sum(COURSES));
+})();
+</script>
+</body>
+</html>

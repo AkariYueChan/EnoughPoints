@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>EnoughPoints · 我的学分规划</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="site-head"><a href="/" class="brand"><span class="brand-icon">E<span>+</span></span><span>EnoughPoints<small>把大学课程，排成自己的计划。</small></span></a><div class="head-actions"><span class="local-dot">临时工作空间</span><button id="helpButton" class="text-btn">使用说明</button><a class="gh-btn" href="https://github.com/AkariYueChan/EnoughPoints" target="_blank" rel="noopener noreferrer" title="在 GitHub 上查看这个项目（新标签页打开）"><svg class="gh-logo" viewBox="0 0 16 16" width="17" height="17" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a></div></header>
+  <main class="wrap">
+    <div class="workspace-bar"><div class="breadcrumbs">我的工作空间 <span>/</span> 课程规划</div><div class="workspace-actions"><label class="sr-only" for="planSelect">切换方案</label><select id="planSelect"><option value="">我的方案</option></select><button class="primary" id="importButton">＋ 导入 Excel</button></div></div>
+    <section id="empty" class="empty-workspace"><span class="eyebrow">YOUR NEXT SEMESTER, PLANNED.</span><h1>从一张课程表，<br>开始规划你的大学。</h1><p>导入培养方案，挑选感兴趣的课程。<br>每一个学期、每一分学分，都清清楚楚。</p><button class="primary large" id="emptyImport">导入我的 Excel <span>↗</span></button><button id="sampleButton" class="text-btn">或使用原始课程表示例体验 →</button><div class="empty-cards" aria-hidden="true"><div class="demo-card"><span class="tag public">公共基础课</span><b>大学英语</b><small>必修 · 第 1 学期</small><strong>2 <span>学分</span></strong></div><div class="demo-card purple"><span class="tag elective">专业选修</span><b>探索下一门兴趣课</b><small>点击加入你的计划</small><strong>＋</strong></div></div><div class="empty-foot"><span>01 选择工作表</span><span>02 核对课程</span><span>03 自由规划</span></div></section>
+    <section id="planner" hidden></section>
+    <footer class="site-footer"><span>EnoughPoints / 课程与学分规划</span><span>数据仅供本次使用，进入规划页后服务器即清除 · 计划学分不等于已获得学分</span></footer>
+  </main>
+  <dialog id="importDialog" class="wide-dialog" aria-labelledby="importTitle"><div class="dialog-top"><div><span class="eyebrow">IMPORT YOUR CURRICULUM</span><h2 id="importTitle">导入课程表</h2></div><button class="icon-btn" data-close="importDialog" aria-label="关闭导入">✕</button></div><div class="steps" id="steps"></div><div id="importContent"></div></dialog>
+  <dialog id="scheduleDialog" class="schedule-dialog" aria-labelledby="scheduleTitle"><div class="dialog-top no-print"><div><span class="eyebrow">MY SEMESTER PLAN</span><h2 id="scheduleTitle">我的学期选课表</h2></div><div class="button-row"><button id="printButton" class="primary">打印 / 保存 PDF</button><button data-close="scheduleDialog">返回规划</button></div></div><div id="scheduleContent"></div></dialog>
+  <dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-top"><h2 id="helpTitle">怎样使用 EnoughPoints</h2><button class="icon-btn" data-close="helpDialog" aria-label="关闭说明">✕</button></div><ol class="help-list"><li>导入培养方案 Excel，选择包含完整课程列表的工作表。</li><li>核对表头和字段对应关系，再修正课程名称、性质、学分、类别和学期。</li><li>从正式培养方案填写学分目标。留空表示未知，系统不会猜测毕业要求。</li><li>必修课自动固定排入。点击或拖动选修卡片，添加或移除计划课程。</li><li>一门跨学期课程可以在不同学期展示，累计学分只计一次。</li><li>选择仅保留在当前页面，刷新或离开需重新导入。生成学期表后可另存为 PDF，用完点击“删除本次数据”。</li></ol><p class="notice">当前版本支持 Excel 导入；尚未接入教务系统、图片或 PDF 导入。选课计划仅用于辅助规划。</p><a class="download-link" href="/sample.xlsx" download="原始课程表.xlsx">下载示例 Excel ↗</a></dialog>
+  <div id="toast" role="status" aria-live="polite"></div><button id="toTop" aria-label="回到顶部">↑</button>
+</body>
+</html>
