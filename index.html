@@ -516,6 +516,7 @@
       </svg>
       <span>GitHub</span>
     </a>
+    <button class="detail-btn" id="btn-export-html" type="button" title="保存课程、当前选课和筛选状态，离线打开后可继续规划">导出当前 HTML ↓</button>
     <button class="detail-btn" id="btn-delete-data" type="button">删除本次数据</button>
     <a class="detail-btn" id="btn-reimport" href="/"
        title="回到导入页面，重新导入一份培养方案">↺ 重新导入</a>
@@ -677,6 +678,13 @@
 </div>
 
 <script>
+/* 保存未渲染的自包含页面，导出时重新注入数据，避免累积卡片或弹窗状态。 */
+let EXPORT_TEMPLATE = (() => {
+  const page = document.documentElement.cloneNode(true);
+  page.querySelector('#course-data')?.remove();
+  page.querySelectorAll('[nonce]').forEach(el => el.removeAttribute('nonce'));
+  return '<!doctype html>\n' + page.outerHTML;
+})();
 /* =========================================================
    ★ 前后端对接说明（EnoughPoints 本地版）
    ------------------------------------------------------------------
@@ -821,6 +829,13 @@ function resetAll(){
   prevElecOk = false;
 }
 resetAll();
+if (INJECTED?.offline) {
+  COURSES.forEach(c => {
+    if (!isLocked(c) && INJECTED.place?.[c.id] === c.cat) PLACE[c.id] = c.cat;
+  });
+  FILTERS.forEach(f => FILTER_ON[f.key] = INJECTED.filters?.[f.key] === true);
+}
+const IS_OFFLINE = location.protocol === 'file:' || INJECTED?.offline === true;
 
 const $ = id => document.getElementById(id);
 const r1 = n => Math.round(n * 100) / 100;        // 显示最多两位小数；判定使用整数百分之一学分
@@ -1491,10 +1506,46 @@ function applyGoal(){
   document.title=`${PLAN_NAME} · 选课学分规划`;
 }
 
+/* 导出独立 HTML，Excel 文本不能成为脚本或 HTML 标签。 */
+function exportCurrentHTML(){
+  try {
+    const page = new DOMParser().parseFromString(EXPORT_TEMPLATE, 'text/html');
+    const data = page.createElement('script');
+    data.id = 'course-data';
+    data.textContent = 'window.__ENOUGH_POINTS__=' + JSON.stringify({
+      name: PLAN_NAME, courses: COURSES, goal: GOAL,
+      place: PLACE, filters: FILTER_ON, offline: true
+    }).replace(/</g, '\\u003c') + ';';
+    page.querySelector('script').before(data);
+    const blob = new Blob(['<!doctype html>\n' + page.documentElement.outerHTML],
+      {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = (PLAN_NAME.replace(/[\\/:*?"<>|\x00-\x1f]/g, '_').trim() || 'EnoughPoints') + '-离线规划.html';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    toast('已导出离线网页；后续修改请再次导出保存');
+  } catch (e) {
+    toast('导出失败，请重试或检查浏览器下载设置');
+    console.error('HTML export failed', e);
+  }
+}
+$('btn-export-html').addEventListener('click', exportCurrentHTML);
+if (IS_OFFLINE) {
+  $('btn-reimport').remove();
+  $('btn-delete-data').textContent = '清空当前页面';
+  document.querySelector('.page-sub').textContent = '离线规划 · 修改后请再次导出 HTML 保存；清空页面不会删除已下载文件';
+}
+FILTERS.forEach(f => $(f.btn)?.setAttribute('aria-pressed', String(FILTER_ON[f.key])));
+
 /* 数据仅保留在当前页面；退出时清空内存与 DOM，禁止后退缓存恢复。 */
 function clearPageData(){
   COURSES.length = 0;
   Object.keys(PLACE).forEach(id => delete PLACE[id]);
+  EXPORT_TEMPLATE = '';
   INJECTED = null;
   PLAN_NAME = '';
   delete window.__ENOUGH_POINTS__;
@@ -1504,13 +1555,14 @@ function clearPageData(){
 }
 $('btn-delete-data').addEventListener('click', () => {
   clearPageData();
-  location.replace('/');
+  if (IS_OFFLINE) document.body.textContent = '当前页面已清空。已下载的 HTML 文件仍保留，请自行删除不再需要的文件。';
+  else location.replace('/');
 });
 window.addEventListener('pagehide', clearPageData);
-window.addEventListener('pageshow', e => { if(e.persisted) location.replace('/'); });
+window.addEventListener('pageshow', e => { if(e.persisted) { if (IS_OFFLINE) location.reload(); else location.replace('/'); } });
 document.getElementById('course-data')?.remove();
 delete window.__ENOUGH_POINTS__;
-if(INJECTED) history.replaceState(null, '', '/planner');
+if(INJECTED && !IS_OFFLINE) history.replaceState(null, '', '/planner');
 
 /* ================= 启动 ================= */
 applyGoal();
